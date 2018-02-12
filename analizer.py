@@ -13,5 +13,5 @@ morph = pymorphy2.MorphAnalyzer()
 
 def normalize(text):
   tokens = [token for token in tokenizer.tokenize(text.lower())]
-  normTokens = [morph.parse(t)[0].normal_form for t in tokens ]
-  return [t for t in normTokens if t not in stop_words]
+  tokens = [morph.parse(t)[0].normal_form for t in tokens ]
+  return [t for t in tokens if t not in stop_words]
