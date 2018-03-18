@@ -7,7 +7,7 @@ from sklearn.naive_bayes import MultinomialNB, GaussianNB, BernoulliNB
 clf = MultinomialNB()
 
 from analizer import normalize
-vectorizer = TfidfVectorizer(analyzer=normalize)
+vectorizer = CountVectorizer(analyzer=normalize)
 
 samples = []
 with codecs.open('./ready-data.tsv', 'r') as tsvFile:
@@ -20,7 +20,7 @@ trainSet = vectorizer.fit_transform([t['text'] for t in samples])
 clf.fit(trainSet, [t['tag'] for t in samples])
 
 
-def most_informative_feature_for_class(vectorizer, classifier, classlabel, n=10):
+def most_informative_feature_for_class(vectorizer, classifier, classlabel, n=20):
   labelid = list(classifier.classes_).index(classlabel)
   feature_names = vectorizer.get_feature_names()
   topn = sorted(zip(classifier.feature_log_prob_[labelid], feature_names))[-n:]
