@@ -1,12 +1,12 @@
 import csv
 import codecs
 
-import sklearn
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB, GaussianNB, BernoulliNB
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
 clf = MultinomialNB()
 
-from analizer import normalize
+from tools.analizer import normalize
 vectorizer = CountVectorizer(analyzer=normalize)
 
 samples = []
