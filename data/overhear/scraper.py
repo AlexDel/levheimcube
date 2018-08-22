@@ -38,6 +38,6 @@ for query, emotion in tagsEmotionsMapping:
         offset += 100
 
     df = pd.DataFrame(results)
-    df.to_csv('anger.csv', encoding='utf-8')
+    df.to_csv(emotion + '.csv', encoding='utf-8')
 
 print('All done')
