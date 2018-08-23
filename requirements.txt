@@ -1,0 +1,7 @@
+pymorphy2
+nltk
+pandas
+numpy
+scikit-learn
+vk
+scipy
