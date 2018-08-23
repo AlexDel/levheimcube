@@ -6,7 +6,6 @@ body_list = body_file.read()
 body_set = set()
 for word in body_list.split(','):
     body_set.add(word.strip())
-    print(word.strip())
 
 #Функция, считающая долю лексики ЛСП "тело"
 def CountFearFeatures_body(text):
