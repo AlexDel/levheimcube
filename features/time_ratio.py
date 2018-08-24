@@ -1,22 +1,15 @@
-import re
+from tools.analizer import normalize
 
 #Функция, считающая долю лексики с семой "короткий промежуток времени"
 def CountFearFeatures_time(text):
     features_time_list = []
-    words = text.lower().split()
+    words = normalize(text)
+
+    timeTokens = ['день', 'секунда', 'момент','час']
+
     if len(words) == 0:
         return 0
     for word in words:
-        if re.match('^минут.*$', word):
-            features_time_list.append(word)
-        elif re.match('^секунд.*$', word):
-            features_time_list.append(word)
-        elif re.match('^момент.*$', word):
-            features_time_list.append(word)
-        elif re.match('^час.*$', word):
-            features_time_list.append(word)
-        elif re.match('^дн.+$', word):
-            features_time_list.append(word)
-        elif re.match('^ден.+$', word):
+        if word in timeTokens:
             features_time_list.append(word)
     return len(features_time_list) / len(words)
