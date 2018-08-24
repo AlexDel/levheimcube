@@ -1,6 +1,9 @@
 import glob
 import os
 import pandas as pd
+import sys
+
+sys._enablelegacywindowsfsencoding()
 
 path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '*.csv')
 
