@@ -1,6 +1,6 @@
 pymorphy2
 nltk
-pandas
+pandas==0.23.4
 numpy
 scikit-learn
 vk
