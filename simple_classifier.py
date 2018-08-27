@@ -1,28 +1,28 @@
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.svm import LinearSVC
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
 
 from data import vkDataFrame
 from features import CountFearFeatures_body, CountFearFeatures_time
+
+# Uncomment this for debugging
+#vkDataFrame = vkDataFrame.sample(frac=0.1)
 
 vkDataFrame['body_ratio'] = vkDataFrame['text'].apply(CountFearFeatures_body)
 vkDataFrame['time_ratio'] = vkDataFrame['text'].apply(CountFearFeatures_time)
 
 #Some data and statistics
 
-print('Структура таблицы:')
+print('\n Структура таблицы:')
 print(vkDataFrame.info())
-
-print('Первые 5 элементов:')
-print(vkDataFrame.loc[:, ['text', 'body_ratio', 'time_ratio', 'emotion']].head())
 
 vkGrouped = vkDataFrame.groupby('emotion')
 
-print('Статистика по частям тела:')
+print('\n Статистика по частям тела:')
 print(vkGrouped['body_ratio'].describe())
 
-print('Статистика по времени:')
+print('\n Статистика по времени:')
 print(vkGrouped['time_ratio'].describe())
 
 #Clasifier itslef#
@@ -33,12 +33,14 @@ y = labelEncoder\
     .fit(vkDataFrame['emotion'].unique())\
     .transform(vkDataFrame['emotion'].values)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
 
 classifier = LinearSVC()
 classifier.fit(X_train, y_train)
 
 y_predictions = classifier.predict(X_test)
 
-accuracy = accuracy_score(y_test, y_predictions)
-print('Average precision-recall score: {0}'.format(accuracy))
+print(labelEncoder.inverse_transform(list(set(y_test) - set(y_predictions)))) # Эти классы не распознаются классификатором
+
+precision = precision_score(y_test, y_predictions, average='micro')
+print('\n Precision score: {0}'.format(precision))
