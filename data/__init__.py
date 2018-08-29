@@ -1,1 +1,1 @@
-from .overhear import vkDataFrame
+from .overhear import getVkData

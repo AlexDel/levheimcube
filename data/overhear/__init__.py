@@ -1,1 +1,1 @@
-from .loader import vkDataFrame
+from .loader import getVkData

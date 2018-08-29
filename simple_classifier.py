@@ -2,9 +2,13 @@ from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.svm import LinearSVC
 from sklearn.metrics import precision_score
-
-from data import vkDataFrame
 from features import CountFearFeatures_body, CountFearFeatures_time
+
+from data import getVkData
+
+# Set to True if reloading is needed
+reloadData = False
+vkDataFrame = getVkData(force_reload=reloadData)
 
 # Uncomment this for debugging
 #vkDataFrame = vkDataFrame.sample(frac=0.1)
