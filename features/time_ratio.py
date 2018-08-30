@@ -3,7 +3,11 @@ from tools.analizer import normalize
 #Функция, считающая долю лексики с семой "короткий промежуток времени"
 def CountFearFeatures_time(text):
     features_time_list = []
-    words = normalize(text)
+
+    if type(text) is str:
+        words = normalize(text)
+    else:
+        words = text
 
     timeTokens = ['день', 'секунда', 'момент','час']
 

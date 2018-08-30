@@ -1,5 +1,7 @@
 import os
 
+from tools.analizer import normalize
+
 #Множество слов, связанных с телом (ПЕРЕДЕЛАТЬ)
 body_file = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'body_spisok.txt'), 'r', encoding='utf-8')
 body_list = body_file.read()
@@ -11,10 +13,13 @@ for word in body_list.split(','):
 def CountFearFeatures_body(text):
     features_body_list = []
 
-    if type(text) is not str:
+    if type(text) is str:
+        words = normalize(text)
+    elif type(text) is list:
+        words = text
+    else:
         return 0
 
-    words = text.lower().split()
     if len(words) == 0:
         return 0
     for word in words:

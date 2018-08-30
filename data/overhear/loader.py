@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import sys
 
-from features import CountFearFeatures_body, CountFearFeatures_time
+from tools.analizer import normalize
 
 sys._enablelegacywindowsfsencoding()
 
@@ -22,8 +22,8 @@ def getVkData(force_reload = True):
 
         vkDataFrame = pd.concat([pd.read_csv(f, index_col=0, encoding='utf-8') for f in glob.glob(path)],
                                 ignore_index=True).dropna(how='any')
-        vkDataFrame['body_ratio'] = vkDataFrame['text'].apply(CountFearFeatures_body)
-        vkDataFrame['time_ratio'] = vkDataFrame['text'].apply(CountFearFeatures_time)
+
+        vkDataFrame['normalized_text'] = vkDataFrame['text'].apply(normalize)
         vkDataFrame.to_pickle(picklePath)
 
         return vkDataFrame
