@@ -23,8 +23,7 @@ def getVkData(force_reload = True):
         vkDataFrame = pd.concat([pd.read_csv(f, index_col=0, encoding='utf-8') for f in glob.glob(path)],
                                 ignore_index=True).dropna(how='any')
 
-        vkDataFrame['normalized_text'] = vkDataFrame['text'].apply(normalize)
-        vkDataFrame['normalized_text_as_string'] = vkDataFrame['normalized_text'].apply(lambda word_list: ' '.join(word_list))
+        vkDataFrame['normalized_text'] = vkDataFrame['text'].apply(lambda text: ' '.join(normalize(text)))
         vkDataFrame.to_pickle(pickle_path)
 
         return vkDataFrame
