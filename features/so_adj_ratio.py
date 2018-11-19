@@ -1,22 +1,23 @@
-import re
-import string
+import pymorphy2
 
 def CountStartleFeatures_SoAdj(text):
-    text = re.sub('['+string.punctuation+']', '', text)    #removing punctuation from text
-    words = text.lower().split()
-
-    soTokens = ['такой', 'такого', 'такому', 'таким', 'таком', 'такая', 'такую', 'такой', 'такое']
-    endings = ['ой', 'ый', 'ий', 'ого', 'его', 'ом', 'ему', 'ым', 'им', 'ем', 'ая', 'яя', 'ей', 'ую', 'юю', 'ей', 'ое', 'ее', 'ому' ]
+    words = text.split()
+    soTokens = ['такой', 'так']
 
     counter = 0
+    morph = pymorphy2.MorphAnalyzer()
 
     if len(words) == 0:
         return 0
-    for i in range(len(words)):
+    for i in range(len(words)-1):
         if words[i].strip() in soTokens:
-            if words[i+1].strip()[-2:] in endings:
+            p = morph.parse(words[i+1])[0]
+            tag = p.tag.POS
+            if tag == 'ADJF' or tag == 'ADJS':
                 counter += 1
-    return counter / len(words)
+    return counter / (len(words) - 1)
 
-#text = open('../data/overhear/startle.csv').read() #uncomment to debug
+#uncomment to debug
+#text = open('../data/overhear/startle.csv').read()
 #CountStartleFeatures_SoAdj(text)
+#kok
