@@ -3,9 +3,9 @@ import os
 import pandas as pd
 import sys
 
-from tools.analizer import normalize
+from tools.analizer import normalize, strip_stopwords
 
-sys._enablelegacywindowsfsencoding()
+# sys._enablelegacywindowsfsencoding()
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 path = os.path.join(current_dir, '*.csv')
@@ -24,6 +24,7 @@ def getVkData(force_reload = True):
                                 ignore_index=True).dropna(how='any')
 
         vkDataFrame['normalized_text'] = vkDataFrame['text'].apply(lambda text: ' '.join(normalize(text)))
+        vkDataFrame['normalized_text_stopwords'] = vkDataFrame['text'].apply(lambda text: ' '.join(strip_stopwords(text)))
         vkDataFrame.to_pickle(pickle_path)
 
         return vkDataFrame
