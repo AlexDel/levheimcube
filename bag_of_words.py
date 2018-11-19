@@ -21,7 +21,7 @@ vkDataFrame = getVkData(force_reload=reloadData)
 count_vect = CountVectorizer()
 
 # Clasifier itslef#
-X = vkDataFrame.loc[:, ['normalized_text']].values
+X = vkDataFrame.loc[:, ['normal_tokens_as_string']].values
 
 labelEncoder = preprocessing.LabelEncoder()
 y = labelEncoder\
