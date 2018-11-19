@@ -6,7 +6,7 @@ from sklearn.naive_bayes import MultinomialNB
 
 clf = MultinomialNB()
 
-from tools.analizer import normalize
+from tools.normalizer import normalize
 vectorizer = CountVectorizer(analyzer=normalize)
 
 samples = []

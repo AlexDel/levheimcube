@@ -7,7 +7,7 @@ import nltk
 from nltk.collocations import *
 bigram_measures = nltk.collocations.BigramAssocMeasures()
 
-from tools.analizer import normalize
+from tools.normalizer import normalize
 
 dataPath = '../data/pismovnik/pismovnik-data.csv'
 df = pd.read_csv(dataPath)

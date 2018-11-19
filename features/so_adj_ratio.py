@@ -1,6 +1,6 @@
 import pymorphy2
 
-def CountStartleFeatures_SoAdj(text):
+def CountStartleFeatures_SoAdj(tokens):
     words = text.split()
     soTokens = ['такой', 'так']
 

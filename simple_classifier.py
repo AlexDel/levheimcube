@@ -16,8 +16,8 @@ vkDataFrame = getVkData(force_reload=reloadData)
 
 
 # Estimating features
-vkDataFrame['body_ratio'] = vkDataFrame['normalized_text'].apply(CountFearFeatures_body)
-vkDataFrame['time_ratio'] = vkDataFrame['normalized_text'].apply(CountFearFeatures_time)
+vkDataFrame['body_ratio'] = vkDataFrame['normal_tokens'].apply(CountFearFeatures_body)
+vkDataFrame['time_ratio'] = vkDataFrame['normal_tokens'].apply(CountFearFeatures_time)
 vkDataFrame['so_adj_ratio'] = vkDataFrame['normalized_text_stopwords'].apply(CountStartleFeatures_SoAdj)
 
 # Uncomment this for debugging
