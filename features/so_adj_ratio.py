@@ -17,5 +17,6 @@ def CountStartleFeatures_SoAdj(text):
                 counter += 1
     return counter / (len(words) - 1)
 
-#text = open('../data/overhear/startle.csv').read() #uncomment to debug
+#uncomment to debug
+#text = open('../data/overhear/startle.csv').read()
 #CountStartleFeatures_SoAdj(text)
