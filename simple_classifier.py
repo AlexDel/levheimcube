@@ -4,7 +4,7 @@ from sklearn.svm import LinearSVC
 from sklearn.metrics import classification_report
 from sklearn.dummy import DummyClassifier
 
-from features import CountFearFeatures_body, CountFearFeatures_time
+from features import CountFearFeatures_body, CountFearFeatures_time, CountStartleFeatures_SoAdj
 
 from data import getVkData
 
@@ -18,6 +18,7 @@ vkDataFrame = getVkData(force_reload=reloadData)
 # Estimating features
 vkDataFrame['body_ratio'] = vkDataFrame['normalized_text'].apply(CountFearFeatures_body)
 vkDataFrame['time_ratio'] = vkDataFrame['normalized_text'].apply(CountFearFeatures_time)
+vkDataFrame['so_adj_ratio'] = vkDataFrame['normalized_text_stopwords'].apply(CountStartleFeatures_SoAdj)
 
 # Uncomment this for debugging
 #vkDataFrame = vkDataFrame.sample(frac=0.1)
@@ -26,7 +27,7 @@ vkGrouped = vkDataFrame.groupby('emotion')
 
 
 # Clasifier itslef#
-X = vkDataFrame.loc[:, ['body_ratio', 'time_ratio']].values
+X = vkDataFrame.loc[:, ['body_ratio', 'time_ratio','so_adj_ratio']].values
 
 labelEncoder = preprocessing.LabelEncoder()
 y = labelEncoder\

@@ -11,6 +11,11 @@ stop_words.extend(other_stopwords)
 
 morph = pymorphy2.MorphAnalyzer()
 
+def strip_stopwords(text):
+  tokens = [token for token in tokenizer.tokenize(text.lower())]
+  tokens = [morph.parse(t)[0].normal_form for t in tokens ]
+  return [t for t in tokens]
+
 def normalize(text):
   tokens = [token for token in tokenizer.tokenize(text.lower())]
   tokens = [morph.parse(t)[0].normal_form for t in tokens ]
