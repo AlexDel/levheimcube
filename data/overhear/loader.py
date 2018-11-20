@@ -17,7 +17,7 @@ def get_normal_tokens(tokens_parsed=[]):
 
 
 def get_tokens_tokens_as_string(tokens_parsed=[]):
-    ' '.join(get_normal_tokens(tokens_parsed))
+    return ' '.join(get_normal_tokens(tokens_parsed))
 
 
 def getVkData(force_reload = True):
@@ -35,7 +35,7 @@ def getVkData(force_reload = True):
 
         vkDataFrame['parsed_tokens'] = vkDataFrame['text'].apply(lambda text: normalize(text))
 
-        vkDataFrame['normal_tokens'] = vkDataFrame['normalized_tokens'].apply(get_normal_tokens)
+        vkDataFrame['normal_tokens'] = vkDataFrame['parsed_tokens'].apply(get_normal_tokens)
         vkDataFrame['normal_tokens_as_string'] = vkDataFrame['text'].apply(get_tokens_tokens_as_string)
 
         vkDataFrame.to_pickle(pickle_path)

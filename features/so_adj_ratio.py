@@ -1,4 +1,4 @@
-import pymorphy2
+from nltk import  bigrams
 
 def CountStartleFeatures_SoAdj(tokens_parsed=[]):
     soTokens = ['такой', 'так']
@@ -8,10 +8,10 @@ def CountStartleFeatures_SoAdj(tokens_parsed=[]):
     if len(tokens_parsed) == 0:
         return 0
 
-    for i, t in enumerate(tokens_parsed):
-        current_token = tokens_parsed[i][0]
-        next_token_pos_tag = tokens_parsed[i+1][1]
-        if current_token in soTokens and next_token_pos_tag in ('ADJF', 'ADJS'):
+    tokens_pairs = bigrams(tokens_parsed)
+
+    for first_token, next_token in tokens_pairs:
+        if first_token[0] in soTokens and next_token[1] in ('ADJF', 'ADJS'):
                 counter += 1
 
     return counter / len(tokens_parsed)
