@@ -20,3 +20,8 @@ def normalize(text):
   tokens = [token for token in tokenizer.tokenize(text.lower())]
   tokens = [morph.parse(t)[0].normal_form for t in tokens ]
   return [t for t in tokens if t not in stop_words]
+
+def normalize2(text):
+  tokens = [token for token in tokenizer.tokenize(text.lower())]
+  tokens = [morph.parse(t)[0].normal_form for t in tokens ]
+  return [t for t in tokens if t not in stop_words]
