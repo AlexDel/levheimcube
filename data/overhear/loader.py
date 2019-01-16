@@ -20,7 +20,7 @@ def get_tokens_tokens_as_string(tokens_parsed=[]):
     return ' '.join(get_normal_tokens(tokens_parsed))
 
 
-def getVkData(force_reload = True):
+def getVkData(force_reload = False):
     pickle_path = os.path.join(current_dir, 'vk.pkl')
     pickle_exist = os.path.isfile(pickle_path)
 

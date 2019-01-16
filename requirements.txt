@@ -5,5 +5,5 @@ numpy
 scikit-learn
 vk
 scipy
-pytorch
+torch
 allennlp
