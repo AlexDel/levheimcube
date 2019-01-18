@@ -1,16 +1,16 @@
-from typing import Tuple, List
 import re
 from time import sleep
 
 import pandas as pd
 import vk
 
-from tools.enums import CubeEmotionClass
+from misc.enums import CubeEmotionClass
+from misc.types import tagsEmotionsMapping
 
 session = vk.Session(access_token='')
 vk_api = vk.API(session)
 
-tagsEmotionsMapping: List[Tuple[CubeEmotionClass, List[str]]] = [
+tagsEmotionsMapping: tagsEmotionsMapping = [
     (CubeEmotionClass.ANGER, ['#Подслушано_БЕСИТ@overhear']),
     (CubeEmotionClass.EXCITEMENT, ['#Подслушано_успех@overhear']),
     (CubeEmotionClass.DISTRESS, ['#Подслушано_одиночество@overhear']),
