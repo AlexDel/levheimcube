@@ -1,20 +1,24 @@
-import vk
-import pandas as pd
+from typing import Tuple, List
 import re
 from time import sleep
+
+import pandas as pd
+import vk
+
+from tools.enums import CubeEmotionClass
 
 session = vk.Session(access_token='')
 vk_api = vk.API(session)
 
-tagsEmotionsMapping = [
-    ('anger', ['#Подслушано_БЕСИТ@overhear']),
-    ('excitement', ['#Подслушано_успех@overhear']),
-    ('distress', ['#Подслушано_одиночество@overhear']),
-    ('startle', ['#Подслушано_странное@overhear', '#Подслушано_мистика@overhear']),
-    ('fear', ['#Подслушано_страшное@overhear']),
-    ('enjoyment', ['#Подслушано_счастье@overhear']),
-    ('shame', ['#Подслушано_стыдно@overhear']),
-    ('disgust', ['#Подслушано_фууу@overhear']),
+tagsEmotionsMapping: List[Tuple[CubeEmotionClass, List[str]]] = [
+    (CubeEmotionClass.ANGER, ['#Подслушано_БЕСИТ@overhear']),
+    (CubeEmotionClass.EXCITEMENT, ['#Подслушано_успех@overhear']),
+    (CubeEmotionClass.DISTRESS, ['#Подслушано_одиночество@overhear']),
+    (CubeEmotionClass.STARTLE, ['#Подслушано_странное@overhear']),
+    (CubeEmotionClass.FEAR, ['#Подслушано_страшное@overhear']),
+    (CubeEmotionClass.ENJOYMENT, ['#Подслушано_счастье@overhear']),
+    (CubeEmotionClass.SHAME, ['#Подслушано_стыдно@overhear']),
+    (CubeEmotionClass.DISGUST, ['#Подслушано_фууу@overhear']),
 ]
 
 for emotion, queries in tagsEmotionsMapping:

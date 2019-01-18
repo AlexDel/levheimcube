@@ -1,0 +1,12 @@
+from enum import Enum
+
+class CubeEmotionClass(Enum):
+    STARTLE: 'STARTLE' = 'STARTLE'
+    ANGER: 'ANGER' = 'ANGER'
+    DISGUST: 'DISGUST' = 'DISGUST'
+    DISTRESS: 'DISTRESS' = 'DISTRESS'
+    ENJOYMENT: 'ENJOYMENT' = 'ENJOYMENT'
+    EXCITEMENT: 'EXCITEMENT' = 'EXCITEMENT'
+    FEAR: 'FEAR' = 'FEAR'
+    SHAME: 'SHAME' = 'SHAME'
+    NEUTRAL: 'NEUTRAL' = 'NEUTRAL'
