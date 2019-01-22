@@ -1,36 +1,36 @@
-import pandas as pd
 import re
 from time import sleep
+from typing import List
 import vk
 
-from misc.types import tags_emotions_mapping
+from misc.types import tags_emotions_mapping, vk_group
 
 
 def fetch_results_by_emotion_mapping(
-    group_id: int,
+    group: vk_group,
     emotion_mapping: tags_emotions_mapping,
     session_token:  str = '',
-) -> pd.DataFrame:
+) -> List:
 
     session = vk.Session(access_token=session_token)
     vk_api = vk.API(session)
 
-    df = pd.DataFrame([])
+    total_results = []
 
     def stripTags(text):
         return re.sub('<[^<]+?>', '', text)
 
     def makeApiRequest(offset, query, emotion=''):
-        response = vk_api.wall.search(owner_id=group_id, offset=offset, owners_only=True, count=100, query=query,
+        response = vk_api.wall.search(owner_id=vk_group['id'], offset=offset, owners_only=True, count=100, query=query,
                                       version='5.69')
         return (response[0], [
             {"text": stripTags(item['text'].replace(query, '')), "emotion": emotion, "source_type": "vk",
-             "source_name": str(group_id)} for item in response[1:]])
+             "source_name": vk_group['id']} for item in response[1:]])
 
     for emotion, queries in emotion_mapping:
         print('Processing started: ' + emotion.value)
 
-        total_results = []
+        result_for_emotion = []
 
         for query in queries:
             results = []
@@ -44,10 +44,10 @@ def fetch_results_by_emotion_mapping(
                 results.extend(results_)
                 offset += 100
 
-            total_results.extend(results)
+            result_for_emotion.extend(results)
 
-        df.append(total_results)
+        total_results.extend(result_for_emotion)
 
     print('All done')
 
-    return df
+    return total_results
