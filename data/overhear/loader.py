@@ -15,7 +15,6 @@ path = os.path.join(current_dir, '*.csv')
 def get_normal_tokens(tokens_parsed=[]):
     return [t[0] for t in tokens_parsed]
 
-
 def get_tokens_tokens_as_string(tokens_parsed=[]):
     return ' '.join(get_normal_tokens(tokens_parsed))
 
