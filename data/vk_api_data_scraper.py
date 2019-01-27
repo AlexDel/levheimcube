@@ -25,18 +25,15 @@ class VkAPIDataScraper():
 
         self.total_results = []
 
-
     def _strip_tags(self, text):
         return re.sub('<[^<]+?>', '', text)
-
 
     def _make_query_api_request(self, offset, query, emotion=''):
         response = self.vk_api.wall.search(owner_id=self.group['id'], offset=offset, owners_only=True, count=100, query=query, version='5.69')
 
         return (response[0], [
             {"text": self._strip_tags(item['text'].replace(query, '')), "emotion": emotion, "source_type": "vk",
-             "source_name": self.group['id']} for item in response[1:]])
-
+             "source_name": self.group['slug']} for item in response[1:]])
 
     def _make_get_all_posts_request(self, offset):
         response = self.vk_api.wall.get(owner_id=self.group['id'], offset=offset, owners_only=True, count=100, version='5.69')
@@ -44,7 +41,6 @@ class VkAPIDataScraper():
         return (response[0], [
             {"text": self._strip_tags(item['text']), "emotion": None, "source_type": "vk",
              "source_name": self.group['id']} for item in response[1:]])
-
 
     def fetch_results_by_emotion_mapping(self) -> List:
         for emotion, queries in self.emotion_mapping:
@@ -93,13 +89,14 @@ class VkAPIDataScraper():
         return self.total_results
 
 
-    def export_to_csv(self, path: str = ''):
+    def export_to_csv(self, folder_path: str = ''):
         resultsDf = pd.DataFrame(self.total_results)
 
         if self.emotion_mapping == None:
-            path = os.path.join(path, f'UNTAGGED_{self.group["name"]}.csv')
-            resultsDf.to_csv(path, encoding='utf-8')
+            path = os.path.join(folder_path, f'UNTAGGED_{self.group["name"]}.csv')
+            resultsDf.to_csv(path, encoding='utf-8', index=False)
 
-        for emotion in CubeEmotionClass:
-            path = os.path.join(path, f'{emotion.value}_{self.group["slug"]}.csv')
-            resultsDf[resultsDf['emotion'] == emotion.value].to_csv(path, encoding='utf-8')
+        for emotion in resultsDf['emotion'].unique():
+            path = os.path.join(folder_path, f'{emotion}_{self.group["slug"]}.csv')
+            emotion_df = resultsDf[resultsDf['emotion'] == emotion]
+            emotion_df.reset_index(drop=True).to_csv(path, encoding='utf-8', index=False)
