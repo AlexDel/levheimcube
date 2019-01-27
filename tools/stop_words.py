@@ -1,5 +1,12 @@
-from nltk.corpus import stopwords
-stop_words = stopwords.words('russian')
+import nltk
+
+try:
+    from nltk.corpus import stopwords
+    stop_words = stopwords.words('russian')
+
+except LookupError:
+    nltk.download('stopwords')
+
 other_stopwords = ['это', 'который', 'тот', 'весь', 'свой', 'наш', 'ещё', 'нея', 'мочь']
 stop_words.extend(other_stopwords)
 

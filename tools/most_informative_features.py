@@ -1,32 +1,27 @@
-import csv
-import codecs
+from typing import List
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
-clf = MultinomialNB()
+def most_informative_feature_for_class(vectorizer, classifier, class_label, n=20):
+    label_id = list(classifier.classes_).index(class_label)
 
-from tools.normalizer import normalize
-vectorizer = CountVectorizer(analyzer=normalize)
+    feature_names = vectorizer.get_feature_names()
 
-samples = []
-with codecs.open('./ready-data.tsv', 'r') as tsvFile:
-  tsvReader = csv.DictReader(tsvFile, delimiter = '\t')
-  for row in tsvReader:
-    samples.append({'text': row['INPUT:text'], 'tag': row['OUTPUT:emotion']})
+    top_n = sorted(zip(classifier.feature_log_prob_[label_id], feature_names))[-n:]
 
-trainSet = vectorizer.fit_transform([t['text'] for t in samples])
-
-clf.fit(trainSet, [t['tag'] for t in samples])
+    for coef, feat in top_n:
+      print(class_label, feat, coef)
 
 
-def most_informative_feature_for_class(vectorizer, classifier, classlabel, n=20):
-  labelid = list(classifier.classes_).index(classlabel)
-  feature_names = vectorizer.get_feature_names()
-  topn = sorted(zip(classifier.feature_log_prob_[labelid], feature_names))[-n:]
+def get_n_most_informative_features(samples):
+    clf = MultinomialNB()
 
-  for coef, feat in topn:
-    print(classlabel, feat, coef)
+    vectorizer = CountVectorizer()
 
-for emotion in set([t['tag'] for t in samples]):
-  most_informative_feature_for_class(vectorizer, clf, emotion)
+    train_set = vectorizer.fit_transform([t['normal_tokens_as_string'] for t in samples])
+
+    clf.fit(train_set, [t['emotion'] for t in samples])
+
+    for emotion in set([t['emotion'] for t in samples]):
+        most_informative_feature_for_class(vectorizer, clf, emotion)
