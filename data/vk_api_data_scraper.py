@@ -82,6 +82,8 @@ class VkAPIDataScraper():
             results.extend(results_)
             offset += 100
 
+            print(f'{count - len(results)} items left.')
+
         self.total_results = results
 
         print('All done')
@@ -93,7 +95,7 @@ class VkAPIDataScraper():
         resultsDf = pd.DataFrame(self.total_results)
 
         if self.emotion_mapping == None:
-            path = os.path.join(folder_path, f'UNTAGGED_{self.group["name"]}.csv')
+            path = os.path.join(folder_path, f'UNTAGGED_{self.group["slug"]}.csv')
             resultsDf.to_csv(path, encoding='utf-8', index=False)
 
         for emotion in resultsDf['emotion'].unique():
