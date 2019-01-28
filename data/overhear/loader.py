@@ -15,10 +15,6 @@ path = os.path.join(current_dir, '*.csv')
 def get_normal_tokens(tokens_parsed=[]):
     return [t[0] for t in tokens_parsed]
 
-def get_tokens_tokens_as_string(tokens_parsed=[]):
-    return ' '.join(get_normal_tokens(tokens_parsed))
-
-
 def getVkData(force_reload = False) -> pd.DataFrame:
     pickle_path = os.path.join(current_dir, 'vk.pkl')
     pickle_exist = os.path.isfile(pickle_path)
@@ -29,13 +25,13 @@ def getVkData(force_reload = False) -> pd.DataFrame:
         if pickle_exist:
             os.remove(pickle_path)
 
-        vkDataFrame = pd.concat([pd.read_csv(f, index_col=0, encoding='utf-8') for f in glob.glob(path)],
+        vkDataFrame = pd.concat([pd.read_csv(f, encoding='utf-8') for f in glob.glob(path)],
                                 ignore_index=True).dropna(how='any')
 
         vkDataFrame['parsed_tokens'] = vkDataFrame['text'].apply(lambda text: normalize(text))
 
         vkDataFrame['normal_tokens'] = vkDataFrame['parsed_tokens'].apply(get_normal_tokens)
-        vkDataFrame['normal_tokens_as_string'] = vkDataFrame['text'].apply(get_tokens_tokens_as_string)
+        vkDataFrame['normal_tokens_as_string'] = vkDataFrame['normal_tokens'].apply(lambda tokens: ' '.join(tokens))
 
         vkDataFrame.to_pickle(pickle_path)
 

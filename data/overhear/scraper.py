@@ -21,7 +21,7 @@ overhear_mapping: tags_emotions_mapping = [
     (CubeEmotionClass.DISGUST, ['#Подслушано_фууу@overhear'])
 ]
 
-scraper = VkAPIDataScraper(overhear_public, overhear_mapping, '12476b1412476b1412476b14cb1226b4871124712476b1448e911b2216dd87466073f19')
+scraper = VkAPIDataScraper(overhear_public, overhear_mapping, '')
 scraper.fetch_results_by_emotion_mapping()
 scraper.export_to_csv(os.getcwd())
 
