@@ -52,7 +52,7 @@ X_train_words, X_test_words, y_train_words, y_test_words = train_test_split(X_wo
 X_train_words = [x[0] for x in X_train_words.tolist()]
 X_test_words =  [x[0] for x in X_test_words.tolist()]
 
-words_vectorizer = TfidfVectorizer()
+words_vectorizer = TfidfVectorizer(analyzer=lambda x: x.split())
 X_train_vectors_words = words_vectorizer.fit_transform(X_train_words)
 X_test_vectors_words = words_vectorizer.transform(X_test_words)
 
@@ -82,15 +82,15 @@ if __name__ == "__main__":
     print('only text benchmarking')
 
     words_model = GridSearchCV(nb_pipeline, param_grid=nb_parameters, scoring='precision_weighted', cv=cv)
-    words_model.fit(X_train_words, y_train_words)
-    y_predictions_words = PE_model.predict(X_test_words)
+    words_model.fit(X_train_vectors_words, y_train_words)
+    y_predictions_words = words_model.predict(X_test_vectors_words)
     report = classification_report(y_test_words, y_predictions_words, target_names=labelEncoder.classes_)
     print(report)
 
     print('emojies + text benchmarking')
 
     overall_model = GridSearchCV(nb_pipeline, param_grid=nb_parameters, scoring='precision_weighted', cv=cv)
-    overall_model.fit(X_train_overvall, y_train_overvall)
+    overall_model.fit(X_train_vectors_overall, y_train_overvall)
     y_predictions_overall = overall_model.predict(X_test_vectors_overall)
     report = classification_report(y_test_overvall, y_predictions_overall, target_names=labelEncoder.classes_)
     print(report)
