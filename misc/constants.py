@@ -10,3 +10,5 @@ class CubeEmotionClass(Enum):
     FEAR: 'FEAR' = 'FEAR'
     SHAME: 'SHAME' = 'SHAME'
     NEUTRAL: 'NEUTRAL' = 'NEUTRAL'
+
+RANDOM_STATE = 1488

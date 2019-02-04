@@ -11,14 +11,11 @@ from sklearn.pipeline import make_pipeline
 
 from data import getVkData
 
-RANDOM_STATE = 42
+RANDOM_STATE = 1488
 
 # Set to True if reloading is needed
 reloadData = False
 vkDataFrame = getVkData(force_reload=reloadData)
-
-
-count_vect = CountVectorizer()
 
 # Clasifier itslef#
 X = vkDataFrame.loc[:, ['normal_tokens_as_string']].values
@@ -46,7 +43,10 @@ model = GridSearchCV(nb_pipeline, param_grid=nb_parameters, scoring='precision_w
 
 model.fit(X_train_counts,  y_train)
 
-y_predictions = model.predict(X_test_counts)
+bag_of_words_classifier = model
 
-report = classification_report(y_test, y_predictions, target_names=labelEncoder.classes_)
-print(report)
+if __name__ == "__main__":
+    y_predictions = model.predict(X_test_counts)
+
+    report = classification_report(y_test, y_predictions, target_names=labelEncoder.classes_)
+    print(report)

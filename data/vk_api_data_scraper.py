@@ -7,7 +7,7 @@ import pandas as pd
 import vk
 
 from misc.types import tags_emotions_mapping
-from misc.enums import CubeEmotionClass
+from misc.constants import CubeEmotionClass
 
 
 class VkAPIDataScraper():

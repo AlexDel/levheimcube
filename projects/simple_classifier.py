@@ -8,7 +8,7 @@ from features import CountFearFeatures_body, CountFearFeatures_time, CountStartl
 
 from data import getVkData
 
-RANDOM_STATE = 42
+RANDOM_STATE = 1488
 
 # Set to True if reloading is needed
 reloadData = False
