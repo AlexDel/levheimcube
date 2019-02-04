@@ -44,14 +44,53 @@ X_test_vectors = emoji_vectorizer.transform(X_test)
 PE_model = GridSearchCV(nb_pipeline, param_grid=nb_parameters, scoring='precision_weighted', cv=cv)
 PE_model.fit(X_train_vectors, y_train)
 
+#Only words
+X_words = emoji_df.loc[:, ['normal_tokens_as_string']].values
+y_words = labelEncoder.transform(emoji_df['emotion'].values)
+
+X_train_words, X_test_words, y_train_words, y_test_words = train_test_split(X_words, y_words, test_size=0.20, random_state=RANDOM_STATE)
+X_train_words = [x[0] for x in X_train_words.tolist()]
+X_test_words =  [x[0] for x in X_test_words.tolist()]
+
+words_vectorizer = TfidfVectorizer()
+X_train_vectors_words = words_vectorizer.fit_transform(X_train_words)
+X_test_vectors_words = words_vectorizer.transform(X_test_words)
+
 
 #Merged Emojies and Words
+emoji_df['emojies_and_text_as_string'] = emoji_df['emojies_as_string'] + ' ' + emoji_df['normal_tokens_as_string']
 
+X_overvall = emoji_df.loc[:, ['emojies_and_text_as_string']].values
+y_overall = labelEncoder.transform(emoji_df['emotion'].values)
+
+X_train_overvall, X_test_overvall, y_train_overvall, y_test_overvall = train_test_split(X_overvall, y_overall, test_size=0.20, random_state=RANDOM_STATE)
+X_train_overvall = [x[0] for x in X_train_overvall.tolist()]
+X_test_overvall =  [x[0] for x in X_test_overvall.tolist()]
+
+overall_vectorizer = TfidfVectorizer(analyzer=lambda x: x.split(), stop_words=None)
+X_train_vectors_overall = overall_vectorizer.fit_transform(X_train)
+X_test_vectors_overall = overall_vectorizer.transform(X_test)
 
 
 if __name__ == "__main__":
-    print('Pure emojies benchmarking')
+    # print('Pure emojies benchmarking')
+    #
+    # y_predictions = PE_model.predict(X_test_vectors)
+    # report = classification_report(y_test, y_predictions, target_names=labelEncoder.classes_)
+    # print(report)
 
-    y_predictions = PE_model.predict(X_test_vectors)
-    report = classification_report(y_test, y_predictions, target_names=labelEncoder.classes_)
+    print('only text benchmarking')
+
+    words_model = GridSearchCV(nb_pipeline, param_grid=nb_parameters, scoring='precision_weighted', cv=cv)
+    words_model.fit(X_train_words, y_train_words)
+    y_predictions_words = PE_model.predict(X_test_words)
+    report = classification_report(y_test_words, y_predictions_words, target_names=labelEncoder.classes_)
+    print(report)
+
+    print('emojies + text benchmarking')
+
+    overall_model = GridSearchCV(nb_pipeline, param_grid=nb_parameters, scoring='precision_weighted', cv=cv)
+    overall_model.fit(X_train_overvall, y_train_overvall)
+    y_predictions_overall = overall_model.predict(X_test_vectors_overall)
+    report = classification_report(y_test_overvall, y_predictions_overall, target_names=labelEncoder.classes_)
     print(report)
