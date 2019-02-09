@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import sys
 
-from tools.normalizer import normalize
+from tools.normalizer import normalize, not_normalize
 from tools.stop_words import strip_stopwords
 
 # sys._enablelegacywindowsfsencoding()
@@ -14,6 +14,7 @@ path = os.path.join(current_dir, '*.csv')
 
 def get_normal_tokens(tokens_parsed=[]):
     return [t[0] for t in tokens_parsed]
+
 
 def getVkData(force_reload = False) -> pd.DataFrame:
     pickle_path = os.path.join(current_dir, 'vk.pkl')
@@ -27,6 +28,8 @@ def getVkData(force_reload = False) -> pd.DataFrame:
 
         vkDataFrame = pd.concat([pd.read_csv(f, encoding='utf-8') for f in glob.glob(path)],
                                 ignore_index=True).dropna(how='any')
+
+        vkDataFrame['punctuation_tokens'] = vkDataFrame['text'].apply(lambda text: not_normalize(text))
 
         vkDataFrame['parsed_tokens'] = vkDataFrame['text'].apply(lambda text: normalize(text))
 
