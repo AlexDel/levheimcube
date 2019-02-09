@@ -9,7 +9,7 @@ from features import CountFearFeatures_pronoun_talk, CountFearFeatures_talk,Coun
 
 from data import getVkData
 
-RANDOM_STATE = 42
+RANDOM_STATE = 1488
 
 # Set to True if reloading is needed
 reloadData = False

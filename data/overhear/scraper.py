@@ -1,6 +1,6 @@
 import os
 
-from misc.enums import CubeEmotionClass
+from misc.constants import CubeEmotionClass
 from misc.types import tags_emotions_mapping
 
 from data.vk_api_data_scraper import VkAPIDataScraper
