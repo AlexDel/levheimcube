@@ -4,7 +4,7 @@ try:
     from nltk.corpus import stopwords
     stop_words = stopwords.words('russian')
 
-except LookupError:
+except (LookupError, NameError) as e:
     nltk.download('stopwords')
 
 other_stopwords = ['это', 'который', 'тот', 'весь', 'свой', 'наш', 'ещё', 'нея', 'мочь']

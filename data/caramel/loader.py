@@ -3,12 +3,15 @@ import glob
 import os
 import pandas as pd
 import sys
+import warnings
+
 from emoji import UNICODE_EMOJI
 
 from tools.normalizer import normalize
-from tools.stop_words import strip_stopwords
 
 # sys._enablelegacywindowsfsencoding()
+
+warnings.simplefilter('ignore')
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 path = os.path.join(current_dir, '*.csv')
@@ -17,8 +20,10 @@ path = os.path.join(current_dir, '*.csv')
 def get_normal_tokens(tokens_parsed=[]):
     return [t[0] for t in tokens_parsed]
 
+
 def fetch_emojis(text: str) -> List:
     return [char for char in text if char in UNICODE_EMOJI]
+
 
 def getCaramelData(force_reload = False) -> pd.DataFrame:
     pickle_path = os.path.join(current_dir, 'vk_caramel.pkl')
