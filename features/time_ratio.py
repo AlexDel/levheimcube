@@ -1,4 +1,4 @@
-from tools.normalizer import normalize
+#from tools.normalizer import normalize
 
 #Функция, считающая долю лексики с семой "короткий промежуток времени"
 def CountFearFeatures_time(tokens=[]):
