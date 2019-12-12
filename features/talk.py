@@ -13,16 +13,6 @@ def CountFearFeatures_talk(tokens=[]):
 
     return counter / len(tokens)
 
-def CountFearFeatures_they_talk(tokens=[]):
-    counter = 0
-
-    if len(tokens) == 0:
-        return 0
-
-    for token in tokens:
-        if token == 'говорят':
-            counter +=1
-
     return counter / len(tokens)
 
 def CountFearFeatures_colon_talk(punctuation_tokens=[]):

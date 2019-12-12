@@ -3,7 +3,7 @@ import string
 import re
 
 morph = pymorphy2.MorphAnalyzer()
-p = morph.parse('хмуриться')[0]
+p = morph.parse('говорят')[0]
 lemma = p.normal_form
 print(lemma)
 print(p.tag)
