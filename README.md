@@ -21,4 +21,4 @@ This repository is dedicated to usage of [Lövheim cube of emotion model](https:
 Feel free to contact on contribution and discussion: [@AlexDel](https://github.com/alexdel), [xyz@verbalab.ru](mailto:xyz@verbalab.ru)
 
 ## Acknowledgments
-The research is funded by Russian Foundation of Fundmental Research. Grant #19-012-00205 
+The research is funded by Russian Foundation for Basic Research. Grant #19-012-00205 
