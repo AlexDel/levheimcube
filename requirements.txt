@@ -8,3 +8,5 @@ scipy
 torch
 allennlp
 emoji
+bs4
+requests
