@@ -1,15 +1,8 @@
-from .time_ratio import CountFearFeatures_time
-from .body_ratio import CountFearFeatures_body
 from .so_adj_ratio import CountStartleFeatures_soAdj, CountStartleFeatures_soAdverbs
-from .negative_ratio import CountStartleFeatures_negative
-from .punctuation import CountStartleFeatures_pnct, CountStartleFeatures_ellipsis, CountStartleFeatures_parcelling
-from .question_words import CountStartleFeatures_question_words
-from .illness import CountFearFeatures_illness
-from .familly import CountFearFeatures_family
-from .unreliable_speech import CountFearFeatures_unreliableSpeech
+from .punctuation import CountStartleFeatures_exclamation, CountStartleFeatures_questionMark, CountStartleFeatures_supriseMark, CountStartleFeatures_ellipsis, CountStartleFeatures_parcelling
 from .to import CountStartleFeatures_to
 from .when_people import CountFearFeatures_whenPeople
-from .parts_of_speech import CountStartleFeatures_Verb, CountStartleFeatures_adjectives
-from .loneliness import CountFearFeatures_myself, CountFearFeatures_loneliness
-from .emphasizers import CountFearFeatures_emphasizers
-from .talk import CountFearFeatures_talk, CountFearFeatures_pronoun_talk
+from .parts_of_speech import CountStartleFeatures_Verb, CountStartleFeatures_adjectives, CountFearFeatures_numbers
+from .talk import CountFearFeatures_talk_myself, CountFearFeatures_what_talk, CountFearFeatures_colon_talk, CountFearFeatures_talk, CountFearFeatures_doctor_talk,  CountFearFeatures_toldMe
+from .comparative import CountFearFeatures_adjComparative, CountFearFeatures_adjSuperb, CountFearFeatures_caps
+from .calc_tokens import calc_tokens_feature

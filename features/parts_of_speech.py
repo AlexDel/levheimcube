@@ -1,3 +1,5 @@
+import pymorphy2
+
 def CountStartleFeatures_Verb(tokens_parsed=[]):
     counter = 0
 
@@ -21,3 +23,18 @@ def CountStartleFeatures_adjectives(tokens_parsed=[]):
             counter +=1
 
     return counter / len(tokens_parsed)
+
+def CountFearFeatures_numbers(punctuation_tokens=[]):
+    counter = 0
+
+    if len(punctuation_tokens) == 0:
+        return 0
+
+    morph = pymorphy2.MorphAnalyzer()
+
+    for token in punctuation_tokens:
+        p = morph.parse(token)[0]
+        if 'NUMB' in p.tag:
+            counter +=1
+
+    return counter / len(punctuation_tokens)
