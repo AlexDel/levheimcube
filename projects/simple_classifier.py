@@ -6,13 +6,13 @@ from sklearn.dummy import DummyClassifier
 
 from features import calc_tokens_feature, CountFearFeatures_caps, CountFearFeatures_numbers, CountFearFeatures_adjSuperb, CountFearFeatures_adjComparative, CountFearFeatures_talk_myself,CountFearFeatures_colon_talk, CountFearFeatures_what_talk, CountStartleFeatures_supriseMark, CountStartleFeatures_exclamation, CountStartleFeatures_questionMark, CountFearFeatures_toldMe,CountFearFeatures_doctor_talk,CountFearFeatures_talk, CountStartleFeatures_parcelling, CountFearFeatures_whenPeople, CountStartleFeatures_ellipsis, CountStartleFeatures_adjectives, CountStartleFeatures_Verb, CountStartleFeatures_soAdj, CountStartleFeatures_soAdverbs, CountStartleFeatures_to
 from tokens import theyTalktokens,bodyTokens, unreliableSpeechTokens, timeTokens,negativeTokens,illnessTokens, emphasizersTokens, familyTokens, absolutenessTokens, actionsTokens, questionTokens,deathTokens, sadnessTokens, melancholyTokens, sadTokens, distressTokens, gloomyTokens, despondTokens, pityTokens, upsetTokens, grimTokens, glumTokens, tearsTokens, myselfTokens, lonelinessTokens
-from data import getVkData
+from data import get_vk_data
 
 RANDOM_STATE = 1488
 
 # Set to True if reloading is needed
 reloadData = False
-vkDataFrame = getVkData(force_reload=reloadData)
+vkDataFrame = get_vk_data(force_reload=reloadData)
 
 # Estimating features
 

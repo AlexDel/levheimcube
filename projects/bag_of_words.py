@@ -9,13 +9,13 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import make_pipeline
 
-from data import getVkData
+from data import get_vk_data
 
 RANDOM_STATE = 1488
 
 # Set to True if reloading is needed
 reloadData = False
-vkDataFrame = getVkData(force_reload=reloadData)
+vkDataFrame = get_vk_data(force_reload=reloadData)
 
 # Clasifier itslef#
 X = vkDataFrame.loc[:, ['normal_tokens_as_string']].values

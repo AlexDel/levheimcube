@@ -16,7 +16,7 @@ def get_normal_tokens(tokens_parsed=[]):
     return [t[0] for t in tokens_parsed]
 
 
-def getVkData(force_reload = False) -> pd.DataFrame:
+def get_vk_data(force_reload = False) -> pd.DataFrame:
     pickle_path = os.path.join(current_dir, 'vk.pkl')
     pickle_exist = os.path.isfile(pickle_path)
 
