@@ -1,4 +1,4 @@
-# Sentiment Analisys with Lövheim Cube of Emotion
+# Emotion Analisys with Lövheim Cube of Emotion
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/L%C3%B6vheim_cube_of_emotion.svg/375px-L%C3%B6vheim_cube_of_emotion.svg.png)
 
