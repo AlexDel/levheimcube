@@ -1,7 +1,7 @@
 import numpy as np
+import pandas as pd
 
 from sklearn import preprocessing
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import classification_report
@@ -9,30 +9,20 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import make_pipeline
 
-from data import getVkData
 
-RANDOM_STATE = 1488
+df_train = pd.read_csv('https://storage.yandexcloud.net/nlp-dataset-bucket-1/vk-hashtag-public-exports-2019/vk_overhear_without_neutral.train.csv')
+df_test = pd.read_csv('https://storage.yandexcloud.net/nlp-dataset-bucket-1/vk-hashtag-public-exports-2019/vk_overhear_without_neutral.test.csv')
 
-# Set to True if reloading is needed
-reloadData = False
-vkDataFrame = getVkData(force_reload=reloadData)
+labelEncoder = preprocessing.LabelEncoder().fit(df_train['emotion'].unique())
+y_train = labelEncoder.transform(df_train['emotion'].values)
+y_test = labelEncoder.transform(df_test['emotion'].values)
 
-# Clasifier itslef#
-X = vkDataFrame.loc[:, ['normal_tokens_as_string']].values
-
-labelEncoder = preprocessing.LabelEncoder()
-y = labelEncoder\
-    .fit(vkDataFrame['emotion'].unique())\
-    .transform(vkDataFrame['emotion'].values)
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=RANDOM_STATE)
-
-X_train = [x[0] for x in X_train.tolist()]
-X_test =  [x[0] for x in X_test.tolist()]
+X_train = df_train.loc[:, ['text']].values
+X_test =  df_test.loc[:, ['text']].values
 
 count_vect = CountVectorizer()
-X_train_counts = count_vect.fit_transform(X_train)
-X_test_counts = count_vect.transform(X_test)
+X_train_counts = count_vect.fit_transform([x[0] for x in X_train.tolist()])
+X_test_counts = count_vect.transform([x[0] for x in X_test.tolist()])
 
 nb_pipeline = make_pipeline(MultinomialNB())
 nb_parameters = dict(multinomialnb__alpha=np.linspace(0.8, 1.0, num=5),
@@ -45,8 +35,7 @@ model.fit(X_train_counts,  y_train)
 
 bag_of_words_classifier = model
 
-if __name__ == "__main__":
-    y_predictions = model.predict(X_test_counts)
+y_predictions = model.predict(X_test_counts)
 
-    report = classification_report(y_test, y_predictions, target_names=labelEncoder.classes_)
-    print(report)
+report = classification_report(y_test, y_predictions, target_names=labelEncoder.classes_)
+print(report)

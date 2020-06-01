@@ -1,5 +1,7 @@
 import nltk
 
+stop_words = set()
+
 try:
     from nltk.corpus import stopwords
     stop_words = stopwords.words('russian')
