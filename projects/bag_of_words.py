@@ -35,7 +35,8 @@ model.fit(X_train_counts,  y_train)
 
 bag_of_words_classifier = model
 
-y_predictions = model.predict(X_test_counts)
+if __name__ == "__main__":
+    y_predictions = model.predict(X_test_counts)
 
-report = classification_report(y_test, y_predictions, target_names=labelEncoder.classes_)
-print(report)
+    report = classification_report(y_test, y_predictions, target_names=labelEncoder.classes_)
+    print(report)

@@ -1,1 +1,1 @@
-from .loader import getVkData
+from .loader import get_vk_data

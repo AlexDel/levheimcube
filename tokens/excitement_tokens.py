@@ -1,1 +1,0 @@
-theyTalktokens = ['говорят']

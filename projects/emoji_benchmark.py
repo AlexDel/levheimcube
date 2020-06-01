@@ -134,7 +134,8 @@ features_to_evaluate = [
     'emojies_as_string',
     'normal_tokens_as_string',
     'emojies_and_text_as_string',
-    'consistent_emojies_and_text_as_string'
+    'consistent_emojies_and_text_as_string',
+    'consistent_emojies_as_string'
 ]
 
 for feature_name in features_to_evaluate:

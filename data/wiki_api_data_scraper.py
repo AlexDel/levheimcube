@@ -38,5 +38,5 @@ class WikiAPIDataScraper:
 
 
 scraper = WikiAPIDataScraper()
-scraper.make_requests(3)
+scraper.make_requests(300)
 scraper.export_to_csv(os.getcwd())
