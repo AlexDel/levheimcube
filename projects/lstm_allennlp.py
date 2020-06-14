@@ -27,9 +27,6 @@ from allennlp.nn.util import get_text_field_mask
 EMBEDDING_DIM = 512
 HIDDEN_DIM = 1024
 
-
-
-
 class VkOverhearDatasetReader(DatasetReader):
   def __init__(self, tokenizer: Tokenizer = None):
     super().__init__(lazy=False)
@@ -51,16 +48,6 @@ class VkOverhearDatasetReader(DatasetReader):
       tokens = self.tokenizer.tokenize(row['text'])
       label = row['emotion']
       yield self.text_to_instance(tokens, label)
-
-
-reader = VkOverhearDatasetReader()
-
-test_dataset = reader.read(cached_path('https://storage.yandexcloud.net/nlp-dataset-bucket-1/vk-hashtag-public-exports-2019/vk_overhear_without_neutral.test.csv'))
-train_dataset = reader.read(cached_path('https://storage.yandexcloud.net/nlp-dataset-bucket-1/vk-hashtag-public-exports-2019/vk_overhear_without_neutral.train.csv'))
-
-
-
-
 
 
 class VkOverhearEmotionClassifier(Model):
@@ -101,11 +88,10 @@ class VkOverhearEmotionClassifier(Model):
 
 
   def get_metrics(self, reset = False):
-    precision, recall, f1_measure = self.fbeta.get_metric(reset)
-    print(f1_measure)
+    fmetrics = self.fbeta.get_metric(reset)
     return {
         'accuracy': self.accuracy.get_metric(reset),
-        'fbeta': str(f1_measure)
+        'fbeta': fmetrics['fscore']
       }
 
 
@@ -114,9 +100,18 @@ def main():
 
     tokenizer = WordTokenizer()
 
+    reader = VkOverhearDatasetReader(tokenizer)
+
+    test_dataset = reader.read(cached_path(
+        'https://storage.yandexcloud.net/nlp-dataset-bucket-1/vk-hashtag-public-exports-2019/vk_overhear_without_neutral.test.csv'))
+    train_dataset = reader.read(cached_path(
+        'https://storage.yandexcloud.net/nlp-dataset-bucket-1/vk-hashtag-public-exports-2019/vk_overhear_without_neutral.train.csv'))
+
+
+
     vocab = Vocabulary.from_instances(train_dataset + test_dataset)
 
-    encoder = PytorchSeq2VecWrapper(torch.nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, batch_first=True))
+    encoder = PytorchSeq2VecWrapper(torch.nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, batch_first=True, bidirectional=True, num_layers=3))
 
     token_embeddings = Embedding(num_embeddings=vocab.get_vocab_size('tokens'), embedding_dim=EMBEDDING_DIM)
     word_embeddings = BasicTextFieldEmbedder({'tokens': token_embeddings})
@@ -138,3 +133,5 @@ def main():
                       patience=10,
                       num_epochs=20)
     trainer.train()
+
+main()
