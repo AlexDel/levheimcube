@@ -5,6 +5,7 @@ from typing import List, Dict, Optional
 
 import pandas as pd
 import vk
+import tqdm
 
 from misc.types import tags_emotions_mapping
 from misc.constants import CubeEmotionClass
@@ -29,18 +30,18 @@ class VkAPIDataScraper():
         return re.sub('<[^<]+?>', '', text)
 
     def _make_query_api_request(self, offset, query, emotion=''):
-        response = self.vk_api.wall.search(owner_id=self.group['id'], offset=offset, owners_only=True, count=100, query=query, version='5.69')
+        response = self.vk_api.wall.search(owner_id=self.group['id'], offset=offset, owners_only=True, count=100, query=query, v='5.69')
 
         return (response[0], [
             {"text": self._strip_tags(item['text'].replace(query, '')), "emotion": emotion, "source_type": "vk",
              "source_name": self.group['slug']} for item in response[1:]])
 
     def _make_get_all_posts_request(self, offset):
-        response = self.vk_api.wall.get(owner_id=self.group['id'], offset=offset, owners_only=True, count=100, version='5.69')
+        response = self.vk_api.wall.get(owner_id=self.group['id'], offset=offset, owners_only=True, count=100, v='5.69')
 
-        return (response[0], [
+        return (response, [
             {"text": self._strip_tags(item['text']), "emotion": None, "source_type": "vk",
-             "source_name": self.group['id']} for item in response[1:]])
+             "source_name": self.group['id']} for item in response['items']])
 
     def fetch_results_by_emotion_mapping(self) -> List:
         for emotion, queries in self.emotion_mapping:
@@ -74,15 +75,16 @@ class VkAPIDataScraper():
 
         print('Processing started... ')
 
-        count = self._make_get_all_posts_request(0)[0]
+        count = self._make_get_all_posts_request(0)[0]['count']
+
+        pbar = tqdm.tqdm(total=count)
 
         while len(results) < count:
             sleep(2)
             (count_, results_) = self._make_get_all_posts_request(offset)
             results.extend(results_)
             offset += 100
-
-            print(f'{count - len(results)} items left.')
+            pbar.update(100)
 
         self.total_results = results
 
@@ -97,8 +99,10 @@ class VkAPIDataScraper():
         if self.emotion_mapping == None:
             path = os.path.join(folder_path, f'UNTAGGED_{self.group["slug"]}.csv')
             resultsDf.to_csv(path, encoding='utf-8', index=False)
+            return
 
         for emotion in resultsDf['emotion'].unique():
             path = os.path.join(folder_path, f'{emotion}_{self.group["slug"]}.csv')
             emotion_df = resultsDf[resultsDf['emotion'] == emotion]
             emotion_df.reset_index(drop=True).to_csv(path, encoding='utf-8', index=False)
+            return
