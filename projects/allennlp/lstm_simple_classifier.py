@@ -1,4 +1,4 @@
-from typing import Iterator, List, Dict
+from typing import Dict
 
 import torch
 from allennlp.data.iterators import BucketIterator
@@ -11,8 +11,9 @@ from allennlp.data.vocabulary import Vocabulary
 from allennlp.training.metrics import CategoricalAccuracy, FBetaMeasure
 from allennlp.training.trainer import Trainer
 from allennlp.nn.util import get_text_field_mask
+from allennlp.data.tokenizers.word_tokenizer import WordTokenizer
 
-from .vk_data_loader import VkOverhearDatasetReader
+from projects.allennlp.tools.vk_data_loader import VkOverhearDatasetReader
 
 
 EMBEDDING_DIM = 512
