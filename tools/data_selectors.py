@@ -18,7 +18,7 @@ def make_dataframe_from_raw_url(file_url: str, csv_path: str = None) -> pd.DataF
 
     for index, row in df.iterrows():
         df.loc[index, 'text'] = row['INPUT:text']
-        df.loc[index, 'text_measure'] = row['INPUT:text']
+
         coords = calc_vector_coords_from_data(row)
         for mono_amine_key in MONOAMINES_KEYS:
             df.loc[index, mono_amine_key] = coords[mono_amine_key]
@@ -43,7 +43,13 @@ def calc_vector_coords_from_data(row) -> dict:
         'fear_surprise': [1, 1, -1],
         'enjoyment_distress': [-1, 1, -1]
     }
-    survey_values = json.loads(row['text_measure'])
+
+    survey_values = dict(
+        shame_excitement=row['OUTPUT:shame_excitement'],
+        disgust_rage=row['OUTPUT:disgust_rage'],
+        fear_surprise = row['OUTPUT:fear_surprise'],
+        enjoyment_distress = row['OUTPUT:enjoyment_distress']
+    )
 
     result_vec = np.zeros(3)
     for key in survey_values.keys():
