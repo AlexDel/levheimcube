@@ -1,25 +1,29 @@
 from typing import Dict
 
 import torch
-from allennlp.data.iterators import BucketIterator
-from allennlp.common.file_utils import cached_path
 from allennlp.models import Model
-from allennlp.modules.token_embedders import Embedding
+from allennlp.data import Vocabulary
 from allennlp.modules.text_field_embedders import BasicTextFieldEmbedder
-from allennlp.modules.seq2vec_encoders import PytorchSeq2VecWrapper
-from allennlp.data.vocabulary import Vocabulary
-from allennlp.training.metrics import CategoricalAccuracy, FBetaMeasure
-from allennlp.training.trainer import Trainer
-from allennlp.nn.util import get_text_field_mask
-from allennlp.data.tokenizers.word_tokenizer import WordTokenizer
+from allennlp.modules.token_embedders import Embedding
 
-from allennlp.common.checks import check_dimensions_match, ConfigurationError
-from allennlp.data import TextFieldTensors, Vocabulary
-from allennlp.modules import Elmo, FeedForward, Maxout, Seq2SeqEncoder, TextFieldEmbedder
-from allennlp.models.model import Model
-from allennlp.nn import InitializerApplicator
-from allennlp.nn import util
-from allennlp.training.metrics import CategoricalAccuracy
 
-from projects.allennlp.tools.vk_data_loader import VkOverhearDatasetReader
+EMBEDDING_DIM = 512
+HIDDEN_DIM = 256
+EMBEDDING_DROPOUT = 0.2
+
+class BiattentiveClassifier(Model):
+    def __init__(
+        self,
+        vocab: Vocabulary,
+        **kwargs
+    ) -> None:
+        super().__init__(vocab, **kwargs)
+
+        self._text_field_embedder = BasicTextFieldEmbedder(
+            {'tokens': Embedding(
+                num_embeddings=self.vocab.get_vocab_size('tokens'), embedding_dim=EMBEDDING_DIM)
+            })
+        self._embedding_dropout = torch.nn.Dropout(EMBEDDING_DROPOUT)
+
+
 
