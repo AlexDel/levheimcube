@@ -5,6 +5,8 @@ from allennlp.models import Model
 from allennlp.data import Vocabulary
 from allennlp.modules.text_field_embedders import BasicTextFieldEmbedder
 from allennlp.modules.token_embedders import Embedding
+from allennlp.modules import FeedForward
+from allennlp.modules.seq2seq_encoders import PytorchSeq2SeqWrapper
 
 
 EMBEDDING_DIM = 512
@@ -24,6 +26,19 @@ class BiattentiveClassifier(Model):
                 num_embeddings=self.vocab.get_vocab_size('tokens'), embedding_dim=EMBEDDING_DIM)
             })
         self._embedding_dropout = torch.nn.Dropout(EMBEDDING_DROPOUT)
+
+        self._num_classes = self.vocab.get_vocab_size('labels')
+
+        self._pre_encode_feed_forward = FeedForward(input_dim=EMBEDDING_DIM, num_layers=1, activations=torch.nn.ReLU, hidden_dims=[EMBEDDING_DIM])
+        self._encoder  = PytorchSeq2SeqWrapper(torch.nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, batch_first=True))
+
+        self._integrator = PytorchSeq2SeqWrapper(torch.nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, batch_first=True))
+        self._integrator_dropout = torch.nn.Dropout(EMBEDDING_DROPOUT)
+        self._combined_integrator_output_dim = self._integrator.get_output_dim()
+
+
+
+
 
 
 
