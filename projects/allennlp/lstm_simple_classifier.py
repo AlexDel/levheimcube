@@ -72,7 +72,7 @@ def main():
     vocab = Vocabulary.from_instances(train_dataset + test_dataset)
 
     model = VkOverhearEmotionClassifier(vocab)
-    model = model.cuda(cuda_device)
+    #model = model.cuda(cuda_device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-5)
 
