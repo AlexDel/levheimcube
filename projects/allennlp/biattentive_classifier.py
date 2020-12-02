@@ -1,3 +1,5 @@
+from typing import Dict
+
 import torch
 from allennlp.models import Model
 from allennlp.data import Vocabulary
@@ -95,6 +97,19 @@ class BiattentiveClassifier(Model):
 
         embedded_text = self._text_field_embedder(tokens)
 
+        dropped_embedded_text = self._embedding_dropout(embedded_text)
+
+        pre_encoded_text = self._pre_encode_feed_forward(dropped_embedded_text)
+
+        encoded_tokens = self._encoder(pre_encoded_text, text_mask)
+
+        attention_logits = torch.bmm(encoded_tokens.permute(0, 2, 1).contiguous())
+
+
+
+    def get_metrics(self, reset: bool = False) -> Dict[str, float]:
+        pass
+
 
 
 def main():
@@ -112,7 +127,13 @@ def main():
     vocab = Vocabulary.from_instances(train_dataset + test_dataset)
 
     model = BiattentiveClassifier(vocab)
-    model = model.cuda(cuda_device)
+
+    if cuda_device >= 0:
+        model.cuda(cuda_device)
+    else:
+        model.cpu()
+
+    model
 
     # optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-5)
     #
