@@ -1,8 +1,11 @@
 import pandas as pd
+import numpy as np
 
 from sklearn import preprocessing, svm
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import classification_report
+
+np.random.seed(31415) 
 
 df_train = pd.read_csv('https://storage.yandexcloud.net/nlp-dataset-bucket-1/vk-hashtag-public-exports-2019/vk_overhear_without_neutral.train.csv')
 df_test = pd.read_csv('https://storage.yandexcloud.net/nlp-dataset-bucket-1/vk-hashtag-public-exports-2019/vk_overhear_without_neutral.test.csv')
