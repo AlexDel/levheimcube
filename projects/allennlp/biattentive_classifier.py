@@ -9,7 +9,7 @@ from allennlp.modules import FeedForward
 from allennlp.modules.seq2seq_encoders import PytorchSeq2SeqWrapper
 from allennlp.common.checks import check_dimensions_match
 from allennlp.training.metrics import CategoricalAccuracy
-from allennlp.nn.util import get_text_field_mask
+from allennlp.nn.util import get_text_field_mask, masked_softmax, weighted_sum, replace_masked_values
 from allennlp.data.tokenizers import WordTokenizer
 from allennlp.common.file_utils import cached_path
 
@@ -104,6 +104,17 @@ class BiattentiveClassifier(Model):
         encoded_tokens = self._encoder(pre_encoded_text, text_mask)
 
         attention_logits = torch.bmm(encoded_tokens.permute(0, 2, 1).contiguous())
+        attention_weights = masked_softmax(attention_logits, text_mask)
+        encoded_text = weighted_sum(encoded_tokens, attention_weights)
+
+        integrator_input = torch.cat(
+            [encoded_tokens, encoded_tokens - encoded_text, encoded_tokens * encoded_text], 2
+        )
+        integrated_encodings = self._integrator(integrator_input, text_mask)
+
+        max_masked_integrated_encodings = replace_masked_values(
+            integrated_encodings, text_mask.unsqueeze(2),
+        )
 
 
 
