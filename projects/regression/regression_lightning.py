@@ -92,19 +92,19 @@ data_train, data_val = random_split(dataset, [3000, 965])
 train_loader = DataLoader(data_train, batch_size=BATCH_SIZE)
 val_loader = DataLoader(data_val, batch_size=BATCH_SIZE)
 
-# model
-model = RegressionBert()
+if __name__ == '__main__':
+    model = RegressionBert()
 
-# training
-early_stopping = EarlyStopping(monitor="val_loss", min_delta=0.05, mode='min')
-checkpoint_callback = ModelCheckpoint(
-    monitor="val_loss",
-    dirpath="models",
-    filename="regression-bert-{val_loss:.4f}",
-    save_top_k=2,
-    mode="min",
-)
+    # training
+    early_stopping = EarlyStopping(monitor="val_loss", min_delta=0.05, mode='min')
+    checkpoint_callback = ModelCheckpoint(
+        monitor="val_loss",
+        dirpath="models",
+        filename="regression-bert-{val_loss:.4f}",
+        save_top_k=2,
+        mode="min",
+    )
 
-logger = TensorBoardLogger('logs')
-trainer = pl.Trainer(gpus=1, log_every_n_steps=15, logger=logger, callbacks=[checkpoint_callback])
-trainer.fit(model, train_loader, val_loader)
+    logger = TensorBoardLogger('logs')
+    trainer = pl.Trainer(gpus=1, log_every_n_steps=15, logger=logger, callbacks=[checkpoint_callback])
+    trainer.fit(model, train_loader, val_loader)
