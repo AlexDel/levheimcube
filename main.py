@@ -2,6 +2,7 @@ import torch
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from transformers import AutoTokenizer
 
@@ -40,4 +41,4 @@ def predict(req: Req):
     return JSONResponse(content=response)
 
 
-
+app.mount("/", StaticFiles(directory="static",html = True), name="static")
