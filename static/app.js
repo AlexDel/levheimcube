@@ -13,7 +13,9 @@ const {
   Toolbar,
   IconButton,
   MenuIcon,
-  Paper
+  Paper,
+  Slider,
+  Button
 } = MaterialUI;
 
 
@@ -54,6 +56,54 @@ function App() {
     setValue(event.target.value);
   };
 
+  const marks = [
+    {
+      value: -5,
+      label: 'Shame',
+    },   
+    {
+      value: 5,
+      label: 'Excitement',
+    },
+  ];
+
+  const marks2 = [
+    {
+      value: -5,
+      label: 'Anger',
+    },   
+    {
+      value: 5,
+      label: 'Disgust',
+    },
+  ];
+
+  const marks3 = [
+    {
+      value: -5,
+      label: 'Distress',
+    },   
+    {
+      value: 5,
+      label: 'Enjoyment',
+    },
+  ];
+
+  const marks4 = [
+    {
+      value: -5,
+      label: 'Fear',
+    },   
+    {
+      value: 5,
+      label: 'Surprise',
+    },
+  ];
+
+  function valuetext(value) {
+    return `${value}`;
+  }
+
   return (
     <div style={{background: "#cccc", height: '100vh'}}>
       <DenseAppBar/>
@@ -71,10 +121,49 @@ function App() {
             id="standard-multiline-static"
             label="Enter the text (Only Russian is supported)"
             multiline
-            rows={4}           
+            rows={10}           
             variant="standard"
           />
           <TextField id="standard-basic" label="Enter code" variant="standard" />
+          <Button variant="contained" style={{display: 'block', margin: '0 auto'}}>Analyze</Button>     
+          <div style={{padding: 40}}>          
+            <Slider
+              track={false}
+              aria-labelledby="track-false-slider"           
+              defaultValue={0}
+              getAriaValueText={valuetext}
+              marks={marks}
+              min={-5}
+              max={5}       
+            />
+            <Slider
+              track={false}
+              aria-labelledby="track-false-slider"           
+              defaultValue={0}
+              getAriaValueText={valuetext}
+              marks={marks2}
+              min={-5}
+              max={5}       
+            />
+            <Slider
+              track={false}
+              aria-labelledby="track-false-slider"           
+              defaultValue={0}
+              getAriaValueText={valuetext}
+              marks={marks3}
+              min={-5}
+              max={5}       
+            />
+            <Slider
+              track={false}
+              aria-labelledby="track-false-slider"           
+              defaultValue={0}
+              getAriaValueText={valuetext}
+              marks={marks4}
+              min={-5}
+              max={5}       
+            />
+          </div>
         </Paper>        
       </div>
     </Box>
