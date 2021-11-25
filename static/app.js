@@ -50,58 +50,29 @@ function DenseAppBar() {
 
 
 function App() {
-  const [value, setValue] = React.useState('Controlled');
+  const diagonalValues = ['shame_excitement', 'disgust_rage', 'fear_surprise', 'enjoyment_distress'];  
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+  const initialState = diagonalValues.reduce((acc, entry) => ({...acc, [entry]: 0}), {});
 
-  const marks = [
-    {
-      value: -5,
-      label: 'Shame',
-    },   
-    {
-      value: 5,
-      label: 'Excitement',
-    },
-  ];
+  const [sliderValues, setSliderValues] = React.useState(initialState);
 
-  const marks2 = [
-    {
-      value: -5,
-      label: 'Anger',
-    },   
-    {
-      value: 5,
-      label: 'Disgust',
-    },
-  ];
-
-  const marks3 = [
-    {
-      value: -5,
-      label: 'Distress',
-    },   
-    {
-      value: 5,
-      label: 'Enjoyment',
-    },
-  ];
-
-  const marks4 = [
-    {
-      value: -5,
-      label: 'Fear',
-    },   
-    {
-      value: 5,
-      label: 'Surprise',
-    },
-  ];
+  const marks = {
+    'shame_excitement':  [{value: -5, label: 'Shame'}, {value: 0, label: '|'}, {value: 5, label: 'Excitement'}],
+    'disgust_rage': [{value: -5, label: 'Anger'}, {value: 0, label: '|'}, {value: 5, label: 'Disgust'}],
+    'fear_surprise': [{value: -5, label: 'Distress'}, {value: 0, label: '|'}, {value: 5, label: 'Enjoyment'}],
+    'enjoyment_distress': [{value: -5, label: 'Fear'}, {value: 0, label: '|'}, {value: 5, label: 'Surprise'}]
+  }
 
   function valuetext(value) {
     return `${value}`;
+  }
+
+  function getPredictions(text, code){
+
+  }
+
+  function changeValue() {
+    setSliderValues({...sliderValues, shame_excitement: 4})
   }
 
   return (
@@ -125,44 +96,20 @@ function App() {
             variant="standard"
           />
           <TextField id="standard-basic" label="Enter code" variant="standard" />
-          <Button variant="contained" style={{display: 'block', margin: '0 auto'}}>Analyze</Button>     
-          <div style={{padding: 40}}>          
-            <Slider
-              track={false}
-              aria-labelledby="track-false-slider"           
-              defaultValue={0}
-              getAriaValueText={valuetext}
-              marks={marks}
-              min={-5}
-              max={5}       
-            />
-            <Slider
-              track={false}
-              aria-labelledby="track-false-slider"           
-              defaultValue={0}
-              getAriaValueText={valuetext}
-              marks={marks2}
-              min={-5}
-              max={5}       
-            />
-            <Slider
-              track={false}
-              aria-labelledby="track-false-slider"           
-              defaultValue={0}
-              getAriaValueText={valuetext}
-              marks={marks3}
-              min={-5}
-              max={5}       
-            />
-            <Slider
-              track={false}
-              aria-labelledby="track-false-slider"           
-              defaultValue={0}
-              getAriaValueText={valuetext}
-              marks={marks4}
-              min={-5}
-              max={5}       
-            />
+          <Button variant="contained" style={{display: 'block', margin: '0 auto'}} onClick={changeValue}>Analyze</Button>     
+          <div style={{padding: 40}}>
+            {diagonalValues.map(diagonal =>
+              <Slider   
+                track={false}           
+                aria-labelledby="track-false-slider"           
+                value={sliderValues[diagonal]}
+                getAriaValueText={valuetext}
+                marks={marks[diagonal]}
+                min={-5}
+                max={5}
+                disabled
+              />
+            )}        
           </div>
         </Paper>        
       </div>
