@@ -15,7 +15,8 @@ const {
   MenuIcon,
   Paper,
   Slider,
-  Button
+  Button,
+  CircularProgress
 } = MaterialUI;
 
 
@@ -50,6 +51,10 @@ function DenseAppBar() {
 
 
 function App() {
+  const [text, setText] = React.useState('');
+  const [code, setCode] = React.useState('');
+  const [predictionsLoading, setLoading] = React.useState(false);
+
   const diagonalValues = ['shame_excitement', 'disgust_rage', 'fear_surprise', 'enjoyment_distress'];  
 
   const initialState = diagonalValues.reduce((acc, entry) => ({...acc, [entry]: 0}), {});
@@ -67,12 +72,19 @@ function App() {
     return `${value}`;
   }
 
-  function getPredictions(text, code){
+  function getPredictions(){
+    setLoading(true);
 
-  }
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text, key: code})
+    };
 
-  function changeValue() {
-    setSliderValues({...sliderValues, shame_excitement: 4})
+    fetch('/predict', requestOptions)
+        .then(response => response.json())
+        .then(response => setSliderValues(response))
+        .finally(() => setLoading(false))
   }
 
   return (
@@ -94,23 +106,38 @@ function App() {
             multiline
             rows={10}           
             variant="standard"
+            value={text}
+            onChange={(event) => setText(event.target.value)}
           />
-          <TextField id="standard-basic" label="Enter code" variant="standard" />
-          <Button variant="contained" style={{display: 'block', margin: '0 auto'}} onClick={changeValue}>Analyze</Button>     
-          <div style={{padding: 40}}>
-            {diagonalValues.map(diagonal =>
-              <Slider   
-                track={false}           
-                aria-labelledby="track-false-slider"           
-                value={sliderValues[diagonal]}
-                getAriaValueText={valuetext}
-                marks={marks[diagonal]}
-                min={-5}
-                max={5}
-                disabled
-              />
-            )}        
+          <TextField 
+            id="standard-basic" 
+            label="Enter code" 
+            variant="standard" 
+            value={code} 
+            onChange={(event) => setCode(event.target.value)}
+          />
+          { predictionsLoading ? 
+          <div style={{margin: '0 auto', textAlign: 'center'}}><CircularProgress /></div>
+          : 
+          <div>
+            <Button variant="contained" style={{display: 'block', margin: '0 auto'}} onClick={getPredictions}>Analyze</Button>     
+            <div style={{padding: 40}}>
+              {diagonalValues.map(diagonal =>
+                <Slider
+                  key={diagonal}
+                  track={false}           
+                  aria-labelledby="track-false-slider"           
+                  value={sliderValues[diagonal]}
+                  getAriaValueText={valuetext}
+                  marks={marks[diagonal]}
+                  min={-5}
+                  max={5}
+                  disabled
+                />
+              )}        
+            </div>
           </div>
+          }          
         </Paper>        
       </div>
     </Box>
