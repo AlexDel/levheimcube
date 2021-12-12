@@ -1,3 +1,5 @@
+import random
+
 import pandas as pd
 import torch
 from transformers import AutoModel, AutoTokenizer
@@ -12,7 +14,7 @@ EPOCHS = 100
 SEED = 2021
 BERT = 'DeepPavlov/distilrubert-tiny-cased-conversational'
 MAX_LENGTH = 200
-BATCH_SIZE = 64
+BATCH_SIZE = 16
 
 input_col = 'INPUT:text'
 outpul_cols = ['OUTPUT:disgust_rage', 'OUTPUT:fear_surprise', 'OUTPUT:shame_excitement', 'OUTPUT:enjoyment_distress']
@@ -43,37 +45,47 @@ class OverhearRegressionDataset(Dataset):
 
 
 class RegressionBert(pl.LightningModule):
-    def __init__(self, freeze_bert=True):
+    def __init__(self, freeze_bert=False):
         super(RegressionBert, self).__init__()
         self.bert = AutoModel.from_pretrained(BERT, num_labels=1)
         if freeze_bert:
             for p in self.bert.parameters():
                 p.requires_grad = False
-        self.fc0 = torch.nn.Linear(768, 2048)
-        self.fc1 = torch.nn.Linear(2048, 512)
-        self.fc2 = torch.nn.Linear(512, 128)
-        self.fc3 = torch.nn.Linear(128, 4)
+
+        self.linear_dict = {}
+        for value in outpul_cols:
+            self.linear_dict[value] = torch.nn.Linear(768, 1)
 
         self.train_loss = torch.nn.MSELoss()
         self.val_loss = torch.nn.L1Loss()
 
-    def forward(self, x, att=None):
+    def forward(self, x, att=None, train_diag=None):
         x = self.bert(x, attention_mask=att)[0]
         x = torch.mean(x, dim=1)
-        x = self.fc0(x)
-        x = self.fc1(x)
-        x = self.fc2(x)
-        x = self.fc3(x)
-        return x
+
+        return_tensors = []
+        for value in outpul_cols:
+            self.linear_dict[value].weight.requires_grad = False
+
+            if train_diag is not None and value == train_diag:
+                self.linear_dict[train_diag].weight.requires_grad = True
+
+            diagonal_value = self.linear_dict[value](x)
+            return_tensors.append(diagonal_value)
+
+        return torch.cat([*return_tensors], 1)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=1e-6)
+        optimizer = torch.optim.Adam(self.parameters(), lr=0.005)
         return optimizer
 
     def training_step(self, train_batch, batch_idx):
         inputs, values = train_batch
-        outputs = self.forward(inputs)
-        loss = self.train_loss(outputs, values)
+        train_diag = random.choice(outpul_cols)
+        outputs = self.forward(inputs, train_diag=train_diag)
+        position = outpul_cols.index(train_diag)
+
+        loss = self.train_loss(outputs[:, position], values[:, position])
         self.log('train_loss', loss)
 
         return loss
@@ -106,5 +118,5 @@ if __name__ == '__main__':
     )
 
     logger = TensorBoardLogger('logs')
-    trainer = pl.Trainer(gpus=1, log_every_n_steps=15, logger=logger, callbacks=[checkpoint_callback])
+    trainer = pl.Trainer(log_every_n_steps=15, logger=logger, callbacks=[checkpoint_callback])
     trainer.fit(model, train_loader, val_loader)
