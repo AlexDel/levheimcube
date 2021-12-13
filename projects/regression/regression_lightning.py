@@ -1,5 +1,3 @@
-import random
-
 import pandas as pd
 import torch
 from transformers import AutoModel, AutoTokenizer
@@ -51,41 +49,33 @@ class RegressionBert(pl.LightningModule):
         if freeze_bert:
             for p in self.bert.parameters():
                 p.requires_grad = False
+        self.fc0 = torch.nn.Linear(768, 2048)
+        self.fc1 = torch.nn.Linear(2048, 512)
+        self.fc2 = torch.nn.Linear(512, 128)
+        self.fc3 = torch.nn.Linear(128, 4)
 
-        self.linear_dict = {}
-        for value in outpul_cols:
-            self.linear_dict[value] = torch.nn.Linear(768, 1)
+        self.lrelu = torch.nn.LeakyReLU()
 
         self.train_loss = torch.nn.MSELoss()
         self.val_loss = torch.nn.L1Loss()
 
-    def forward(self, x, att=None, train_diag=None):
+    def forward(self, x, att=None):
         x = self.bert(x, attention_mask=att)[0]
         x = torch.mean(x, dim=1)
-
-        return_tensors = []
-        for value in outpul_cols:
-            self.linear_dict[value].weight.requires_grad = False
-
-            if train_diag is not None and value == train_diag:
-                self.linear_dict[train_diag].weight.requires_grad = True
-
-            diagonal_value = self.linear_dict[value](x)
-            return_tensors.append(diagonal_value)
-
-        return torch.cat([*return_tensors], 1)
+        x = self.lrelu(self.fc0(x))
+        x = self.lrelu(self.fc1(x))
+        x = self.lrelu(self.fc2(x))
+        x = self.fc3(x)
+        return x
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=0.005)
+        optimizer = torch.optim.Adam(self.parameters(), lr=0.001)
         return optimizer
 
     def training_step(self, train_batch, batch_idx):
         inputs, values = train_batch
-        train_diag = random.choice(outpul_cols)
-        outputs = self.forward(inputs, train_diag=train_diag)
-        position = outpul_cols.index(train_diag)
-
-        loss = self.train_loss(outputs[:, position], values[:, position])
+        outputs = self.forward(inputs)
+        loss = self.train_loss(outputs, values)
         self.log('train_loss', loss)
 
         return loss
