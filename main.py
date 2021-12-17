@@ -9,7 +9,7 @@ from transformers import AutoTokenizer
 from projects.regression.regression_lightning import BERT,MAX_LENGTH, RegressionBert, outpul_cols
 
 
-CHECKPOINT = 'https://storage.yandexcloud.net/nlp-dataset-bucket-1/models/regression-bert-val_loss%3D1.8566.ckpt'
+CHECKPOINT = 'https://storage.yandexcloud.net/nlp-dataset-bucket-1/models/regression-bert-val_loss%3D1.784316.ckpt'
 
 model = RegressionBert.load_from_checkpoint(CHECKPOINT)
 tokenizer = AutoTokenizer.from_pretrained(BERT)
