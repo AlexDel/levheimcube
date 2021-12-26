@@ -102,7 +102,7 @@ function App() {
       <div style={{maxWidth: 700, margin: '0 auto'}}>
         <Paper>
             <Card variant="outlined">
-                <Typography style={{padding: '20px'} variant="body2" gutterBottom component="div">
+                <Typography style={{padding: '20px'}} variant="body2" gutterBottom component="div">
                     The web application has been developed within a project No. 19-012-00205 "Design of sentiment classifier for Internet-texts in Russian backed by Lövheim\'s Cube emotional model" supported by the Russian Foundation for Basic Research and carried out by the researcher team of the Laboratory of Applied Linguistics and Cognitive Research (School of Philology and Language Communication) of the Siberian Federal University.
                 </Typography>
             </Card>
