@@ -109,13 +109,6 @@ function App() {
             value={text}
             onChange={(event) => setText(event.target.value)}
           />
-          <TextField 
-            id="standard-basic" 
-            label="Enter code" 
-            variant="standard" 
-            value={code} 
-            onChange={(event) => setCode(event.target.value)}
-          />
           { predictionsLoading ? 
           <div style={{margin: '0 auto', textAlign: 'center'}}><CircularProgress /></div>
           : 
