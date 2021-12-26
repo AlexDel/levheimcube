@@ -32,9 +32,6 @@ class Req(BaseModel):
 
 @app.post("/predict")
 def predict(req: Req):
-    if req.key != 'lcube':
-        return {}
-
     prediction = predict_diagonal_values(req.text, model, tokenizer)
     response = jsonable_encoder(prediction)
 
