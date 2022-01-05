@@ -75,6 +75,21 @@ function DenseAppBar() {
 function AboutPage() {
   return <Paper><div>
     <Card variant="outlined">
+      <Typography variant="h4">About</Typography>
+      <Typography style={{ padding: '20px' }} variant="body2" gutterBottom component="div">
+       <p> The web application has been developed within a project No. 19-012-00205 "Design of sentiment classifier for Internet-texts in Russian backed by Lövheim\'s Cube emotional model" supported by the Russian Foundation for Basic Research and carried out by the researcher team of the Laboratory of Applied Linguistics and Cognitive Research (School of Philology and Language Communication) of the Siberian Federal University.</p>
+      </Typography>
+    </Card>
+
+    <Card variant="outlined">
+      <Typography variant="h4">Articles</Typography>
+      <Typography style={{ padding: '20px' }} variant="body2" gutterBottom component="div">
+        The web application has been developed within a project No. 19-012-00205 "Design of sentiment classifier for Internet-texts in Russian backed by Lövheim\'s Cube emotional model" supported by the Russian Foundation for Basic Research and carried out by the researcher team of the Laboratory of Applied Linguistics and Cognitive Research (School of Philology and Language Communication) of the Siberian Federal University.
+      </Typography>
+    </Card>
+
+    <Card variant="outlined">
+      <Typography variant="h4">Team</Typography>
       <Typography style={{ padding: '20px' }} variant="body2" gutterBottom component="div">
         The web application has been developed within a project No. 19-012-00205 "Design of sentiment classifier for Internet-texts in Russian backed by Lövheim\'s Cube emotional model" supported by the Russian Foundation for Basic Research and carried out by the researcher team of the Laboratory of Applied Linguistics and Cognitive Research (School of Philology and Language Communication) of the Siberian Federal University.
       </Typography>
