@@ -287,7 +287,7 @@ function App() {
           autoComplete="off"
         >
           <div style={{ maxWidth: 700, margin: '0 auto' }}>
-            <Route path="/" exact component={PredictPage} />
+            <Route path="/" exact component={AboutPage} />
             <Route path="/app" component={PredictPage} />
             <Route path="/about" component={AboutPage} />
           </div>
