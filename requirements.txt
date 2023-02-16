@@ -56,5 +56,5 @@ transformers==4.12.3
 typing-extensions==3.10.0.2
 urllib3==1.26.7
 uvicorn==0.15.0
-Werkzeug==2.0.2
+Werkzeug==2.2.3
 yarl==1.7.2
